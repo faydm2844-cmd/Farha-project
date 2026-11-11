@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f8b8ca">
+  <title>yom_11/11</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8b8ca;
+      color: white;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+    }
+
+    .screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* شاشة كلمة السر */
+    #login-screen {
+      background: linear-gradient(135deg, #f7a9c0, #fbd6df);
+    }
+
+    .login-box {
+      background: #171717;
+      width: 100%;
+      max-width: 360px;
+      padding: 35px 25px;
+      border-radius: 22px;
+      text-align: center;
+      box-shadow: 0 10px 35px #0003;
+    }
+
+    .login-box h1 {
+      color: #ffb6cb;
+      margin-bottom: 12px;
+      font-size: 28px;
+    }
+
+    .login-box p {
+      color: #ddd;
+      margin-bottom: 22px;
+      line-height: 1.7;
+    }
+
+    .password-wrap {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    #passcode {
+      width: 100%;
+      min-width: 0;
+      padding: 13px;
+      border-radius: 10px;
+      border: 1px solid #555;
+      background: #292929;
+      color: white;
+      font-size: 18px;
+      text-align: center;
+      outline: none;
+    }
+
+    #eye-btn {
+      background: #444;
+      color: white;
+      border-radius: 10px;
+      padding: 0 13px;
+    }
+
+    #login-btn {
+      width: 100%;
+      padding: 13px;
+      border-radius: 10px;
+      background: #ff8eae;
+      color: #222;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    #error-msg {
+      color: #ff8097;
+      margin-top: 13px;
+      min-height: 20px;
+      font-size: 14px;
+    }
+
+    /* المحتوى الرئيسي */
+    #main-content {
+      display: none;
+      background: #f8b8ca;
+      min-height: 100vh;
+      padding: 25px 15px 50px;
+      text-align: center;
+    }
+
+    .content-card {
+      background: #171717;
+      max-width: 750px;
+      margin: 0 auto;
+      padding: 28px 18px;
+      border-radius: 22px;
+      box-shadow: 0 10px 30px #0002;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .main-title {
+      color: #ffb6cb;
+      font-size: 30px;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      color: #eee;
+      line-height: 1.8;
+      margin-bottom: 25px;
+    }
+
+    .section {
+      margin-top: 35px;
+      padding-top: 25px;
+      border-top: 1px solid #444;
+    }
+
+    .section h2 {
+      color: #ffb6cb;
+      margin-bottom: 18px;
+      font-size: 23px;
+    }
+
+    /* القلوب المتحركة */
+    #hearts-area {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 5;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -30px;
+      color: white;
+      opacity: .8;
+      animation: floatUp linear forwards;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(0) rotate(0deg);
+        opacity: .8;
+      }
+
+      to {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* الموسيقى */
+    .music-box {
+      background: #252525;
+      border-radius: 15px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      text-align: right;
+    }
+
+    .cover {
+      width: 65px;
+      height: 65px;
+      border-radius: 12px;
+      object-fit: cover;
+      background: #444;
+    }
+
+    .music-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .music-info h3 {
+      color: white;
+      margin-bottom: 7px;
+    }
+
+    .music-info p {
+      color: #bbb;
+      font-size: 13px;
+    }
+
+    #music-btn {
+      background: #ff9fba;
+      color: #222;
+      border-radius: 50%;
+      width: 43px;
+      height: 43px;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    /* العداد */
+    .timer {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      direction: rtl;
+    }
+
+    .time-box {
+      background: #292929;
+      border-radius: 12px;
+      padding: 15px 5px;
+    }
+
+    .time-box strong {
+      display: block;
+      color: #ffb6cb;
+      font-size: 24px;
+      margin-bottom: 7px;
+    }
+
+    .time-box span {
+      color: #ddd;
+      font-size: 12px;
+    }
+
+    /* الرسائل */
+    #message-text {
+      color: white;
+      line-height: 2;
+      font-size: 17px;
+      min-height: 100px;
+      white-space: pre-line;
+      margin-bottom: 18px;
+    }
+
+    .pink-btn {
+      background: #ff9fba;
+      color: #222;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: bold;
+      margin: 5px;
+    }
+
+    .pink-btn:disabled {
+      opacity: .6;
+    }
+
+    /* الصور */
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(1, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      border-radius: 12px;
+      background: #333;
+      cursor: pointer;
+      transition: transform .2s;
+    }
+
+    .gallery img:active {
+      transform: scale(.97);
+    }
+
+    /* شاشة عرض الصورة */
+    #lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      background: #000e;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    #lightbox img {
+      max-width: 100%;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    #close-lightbox {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: white;
+      color: black;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 22px;
+    }
+
+    /* النهاية */
+    #end-screen {
+      display: none;
+      background: #171717;
+      text-align: center;
+      padding: 35px 20px;
+      border-radius: 18px;
+      margin-top: 30px;
+    }
+
+    #end-screen h2 {
+      color: #ffb6cb;
+      margin-bottom: 15px;
+      font-size: 28px;
+    }
+
+    #end-screen p {
+      line-height: 2;
+      margin-bottom: 20px;
+    }
+
+    .footer {
+      color: #bbb;
+      margin-top: 30px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 420px) {
+      .main-title {
+        font-size: 25px;
+      }
+
+      .gallery img {
+        height: 150px;
+      }
+
+      .time-box strong {
+        font-size: 20px;
+      }
+
+      .content-card {
+        padding: 24px 13px;
+      }
+
+      .time-box {
+        padding: 12px 3px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="hearts-area"></div>
+
+  <!-- شاشة كلمة السر -->
+  <section id="login-screen" class="screen">
+
+    <div class="login-box">
+
+      <h1>For 3yon ktakito🙂😂♥️</h1>
+
+      <p>
+       
+      كتاكيتو الغدار الي قالك م بعرف اعمل هابي ماسدج عاملك مفجأه<br>
+       
+      اكتبي كلمة السر عشان تفتحيها 💗
+      </p>
+
+      <div class="password-wrap">
+
+        <input
+          id="passcode"
+          type="password"
+          placeholder="كلمة السر"
+          autocomplete="off"
+        >
+
+        <button id="eye-btn" type="button">🔓</button>
+
+      </div>
+
+      <button id="login-btn" type="button">
+        ارزع الزرار يبطل🙂
+      </button>
+
+      <div id="error-msg"></div>
+
+    </div>
+
+  </section>
+
+  <!-- المحتوى الرئيسي -->
+  <main id="main-content">
+
+    <div class="content-card">
+
+      <h1 class="main-title">For Farha ❤️</h1>
+
+      <p class="subtitle">
+        صفحة صغيرة معمولة مخصوص عشانك 💗<br>
+        يارب تعجبك وتفضل ذكرى حلوة.
+      </p>
+
+      <!-- الموسيقى -->
+      <section class="section">
+
+        <h2>أغنيه أونكل حماقي الي بتحبيها🙂😂 🎵</h2>
+
+        <div class="music-box">
+
+          <img
+            src="cover.jpg"
+            class="cover"
+            alt="غلاف الأغنية"
+          >
+
+          <div class="music-info">
+            <h3>اغنيه عارفه احلى حاجه فيكي اي؟❤️</h3>
+            <p id="music-status">شغّلي الأغنية واستمتعي</p>
+          </div>
+
+          <button id="music-btn" type="button">▶</button>
+
+        </div>
+
+        <audio
+          id="music"
+          src="./your_song.mp3"
+          preload="auto"
+        ></audio>
+
+      </section>
+
+      <!-- العداد -->
+      <section class="section">
+
+        <h2>من يوم 22/5/2025 💞</h2>
+
+        <p style="color:#ddd; margin-bottom:15px;">
+          عدّى على اليوم ده:
+        </p>
+
+        <div class="timer">
+
+          <div class="time-box">
+            <strong id="month">0</strong>
+            <span>شهور</span>
+          </div>
+
+          <div class="time-box">
+            <strong id="days">0</strong>
+            <span>أيام</span>
+          </div>
+
+          <div class="time-box">
+            <strong id="hours">0</strong>
+            <span>ساعات</span>
+          </div>
+
+          <div class="time-box">
+            <strong id="minutes">0</strong>
+            <span>دقايق</span>
+          </div>
+
+          <div class="time-box">
+            <strong id="seconds">0</strong>
+            <span>ثانية</span>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- الرسائل -->
+      <section class="section">
+
+        <h2>نبدأ الجد بقا🙂♥️</h2>
+
+        <p id="message-text">
+          فيه كلام كتير ممكن يتقال، بس خلينا نبدأ واحدة واحدة ❤️
+        </p>
+
+        <button id="next-message" class="pink-btn" type="button">
+          الرسالة اللي بعدها
+        </button>
+
+      </section>
+
+      <!-- معرض الصور -->
+      <section class="section">
+
+        <h2>اتفضلي ابت دوسي عالصور عشان تتفرجي على حلاوتك</h2>
+
+        <div class="gallery">
+
+          <img src="photo1.jpg" alt="">
+          <img src="photo2.jpg" alt="">
+          <img src="photo3.jpg" alt="">
+          <img src="photo4.jpg" alt="">
+          <img src="photo5.jpg" alt="">
+          <img src="photo6.jpg" alt="">
+          <img src="photo7.jpg" alt="">
+          <img src="photo8.jpg" alt="">
+
+        </div>
+
+      </section>
+
+      <!-- صور الشات -->
+      <section class="section">
+
+        <h2>ذكريات من الاستار ماسدج بتاعتك 💬</h2>
+
+        <div class="gallery">
+
+          <img src="chat1.jpg" alt="">
+          <img src="chat2.jpg" alt="">
+          <img src="chat3.jpg" alt="">
+          <img src="chat4.jpg" alt="">
+          <img src="chat5.jpg" alt="">
+          <img src="chat6.jpg" alt="">
+          <img src="chat7.jpg" alt="">
+          <img src="chat8.jpg" alt="">
+          <img src="chat9.jpg" alt="">
+          <img src="chat10.jpg" alt="">
+          <img src="chat11.jpg" alt="">
+          <img src="chat12.jpg" alt="">
+          <img src="chat13.jpg" alt="">
+          <img src="chat14.jpg" alt="">
+          <img src="chat15.jpg" alt="">
+          <img src="chat16.jpg" alt="">
+          <img src="chat17.jpg" alt="">
+          <img src="chat18.jpg" alt="">
+          <img src="chat19.jpg" alt="">
+          <img src="chat20.jpg" alt="">
+
+        </div>
+
+      </section>
+
+      <!-- النهاية -->
+      <section id="end-screen">
+
+        <h2>وصلنا للنهاية ❤️</h2>
+
+        <p>
+          دي كانت مفاجأة صغيرة،<br>
+          وأتمنى تكون رسمت ابتسامة على وشك 💗
+        </p>
+
+        <button id="restart-btn" class="pink-btn" type="button">
+          من الأول تاني
+        </button>
+
+      </section>
+
+      <div class="footer">Made with katakito 7abibk❤️</div>
+
+    </div>
+
+  </main>
+
+  <!-- تكبير الصور -->
+  <div id="lightbox">
+
+    <button id="close-lightbox" type="button">×</button>
+
+    <img id="lightbox-img" src="" alt="الصورة">
+
+  </div>
+
+  <script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+      // اختصار الوصول للعناصر
+      const $ = function (id) {
+        return document.getElementById(id);
+      };
+
+      const loginScreen = $("login-screen");
+      const mainContent = $("main-content");
+
+      const passcodeInput = $("passcode");
+      const loginBtn = $("login-btn");
+      const errorMsg = $("error-msg");
+      const eyeBtn = $("eye-btn");
+
+      const music = $("music");
+      const musicBtn = $("music-btn");
+      const musicStatus = $("music-status");
+
+      let heartInterval = null;
+      let timerInterval = null;
+      let messageIndex = 0;
+      let typingTimer = null;
+      let isLoggedIn = false;
+
+      // الرسائل
+      const messages = [
+
+        "يمكن الكلام مش دايمًا بيعرف يوصف اللي جوانا، بس حبيت أعمل الصفحة دي عشان تكون ذكرى مختلفة ❤️",
+
+        "يمكن علاقتنا تكون غريبه شويه بس بجد وجودك معايا غيرني للأحسن وبجد وجودك فرق جدا معايا عرفت انسانه راجل بجد فغيابي وتستاهل كل خير♥️",
+
+        "كل يوم بيعدي علينا بنطلع منه بذكريات جديده تفضل محفوره فينا طول العمر زي حاليا كدا اتعلمت البرمجه او متعلمتهاش اوي يعني شات جي بي تي ساعدني شويه بس المهم اتعلمت البرمجه عشان اعملك صفحه تفرحك🙂😂♥️",
+
+        "فاكره حاشر؟؟😂♥️",
+
+        "طب فاكره الي بلاش نذكر اسمها بس دي سبب ارتباطنا؟😂♥️",
+
+        "طبببب فاكرههه شرووق؟؟؟؟😂😂😂",
+
+        "علما اظن انتي فاكره كل حاجه من اول يوم ارتبطنا فيه بسس فاكرهه لما كنتي بتقولي عابد مين الي ارتبط بيه؟؟!😒😔",
+
+        "انا اتقمصت خلاص م مكمل ماسدجات😔",
+
+        "بهزر متقمصتش احنا فعلا مكنش في عقل بشري ممكن يتخيل اننا نرتبط🙂😂♥️",
+
+        "وبس فأخر ماسدج احب اقولك ان بجد وجودك معايا دقيقه افضلي ان الدنيا تكون كلها معايا طول العمر ومستعد اخسر الدنيا كلها عشانك♥️"
+
+      ];
+
+      // إظهار وإخفاء كلمة السر
+      eyeBtn.addEventListener("click", function () {
+
+        if (passcodeInput.type === "password") {
+
+          passcodeInput.type = "text";
+          eyeBtn.textContent = "🔒";
+
+        } else {
+
+          passcodeInput.type = "password";
+          eyeBtn.textContent = "🔓";
+
+        }
+
+      });
+
+      // تسجيل الدخول
+      function login() {
+
+        if (isLoggedIn) return;
+
+        const enteredPassword = passcodeInput.value.trim();
+
+        if (enteredPassword !== "11/11") {
+
+          errorMsg.textContent =
+            "فرحه ارجوكي اليوم م ناقص ذكاء🙂";
+
+          passcodeInput.focus();
+
+          return;
+        }
+
+        isLoggedIn = true;
+
+        errorMsg.textContent = "";
+
+        loginScreen.style.display = "none";
+        mainContent.style.display = "block";
+
+        startWhiteHearts();
+        startTimer();
+
+        // محاولة تشغيل الأغنية
+        music.play().then(function () {
+
+          musicBtn.textContent = "Ⅱ";
+          musicStatus.textContent = "الأغنية شغالة ❤️";
+
+        }).catch(function () {
+
+          musicBtn.textContent = "▶";
+          musicStatus.textContent =
+            "اضغطي تشغيل لتشغيل الأغنية";
+
+        });
+
+      }
+
+      loginBtn.addEventListener("click", login);
+
+      passcodeInput.addEventListener("keydown", function (event) {
+
+        if (event.key === "Enter") {
+          login();
+        }
+
+      });
+
+      // تشغيل وإيقاف الموسيقى
+      musicBtn.addEventListener("click", function () {
+
+        if (music.paused) {
+
+          music.play().then(function () {
+
+            musicBtn.textContent = "Ⅱ";
+            musicStatus.textContent = "الأغنية شغالة ❤️";
+
+          }).catch(function () {
+
+            musicBtn.textContent = "▶";
+            musicStatus.textContent =
+              "تأكدي من وجود ملف الأغنية";
+
+          });
+
+        } else {
+
+          music.pause();
+
+          musicBtn.textContent = "▶";
+          musicStatus.textContent = "الأغنية متوقفة";
+
+        }
+
+      });
+
+      // متابعة حالة الأغنية
+      music.addEventListener("play", function () {
+
+        musicBtn.textContent = "Ⅱ";
+        musicStatus.textContent = "الأغنية شغالة ❤️";
+
+      });
+
+      music.addEventListener("pause", function () {
+
+        musicBtn.textContent = "▶";
+
+        if (!music.ended) {
+          musicStatus.textContent = "الأغنية متوقفة";
+        }
+
+      });
+
+      music.addEventListener("ended", function () {
+
+        musicBtn.textContent = "▶";
+        musicStatus.textContent = "الأغنية خلصت ❤️";
+
+      });
+
+      music.addEventListener("error", function () {
+
+        musicBtn.textContent = "▶";
+
+        musicStatus.textContent =
+          "ملف الأغنية غير موجود أو لا يمكن تشغيله";
+
+      });
+
+      // القلوب البيضاء المتحركة
+      function createHeart() {
+
+        const heart = document.createElement("div");
+
+        heart.className = "heart";
+
+        heart.textContent =
+          Math.random() > 0.5 ? "♡" : "♥";
+
+        heart.style.left =
+          Math.random() * 100 + "vw";
+
+        heart.style.fontSize =
+          (15 + Math.random() * 22) + "px";
+
+        const duration = 5 + Math.random() * 5;
+
+        heart.style.animationDuration = duration + "s";
+
+        $("hearts-area").appendChild(heart);
+
+        setTimeout(function () {
+          heart.remove();
+        }, duration * 1000);
+
+      }
+
+      function startWhiteHearts() {
+
+        if (heartInterval !== null) {
+          clearInterval(heartInterval);
+        }
+
+        createHeart();
+
+        heartInterval = setInterval(createHeart, 450);
+
+      }
+
+      // العداد من تاريخ 22 مايو 2025
+      function startTimer() {
+
+        const startDate = new Date(2025, 4, 22, 0, 0, 0);
+
+        function updateTimer() {
+
+          const now = new Date();
+
+          if (now < startDate) {
+
+            $("month").textContent = 0;
+            $("days").textContent = 0;
+            $("hours").textContent = 0;
+            $("minutes").textContent = 0;
+            $("seconds").textContent = 0;
+
+            return;
+          }
+
+          // حساب الشهور الفعلية
+          let months =
+            (now.getFullYear() - startDate.getFullYear()) * 12 +
+            (now.getMonth() - startDate.getMonth());
+
+          let currentDate = new Date(startDate);
+
+          currentDate.setMonth(
+            currentDate.getMonth() + months
+          );
+
+          if (currentDate > now) {
+
+            months--;
+
+            currentDate = new Date(startDate);
+
+            currentDate.setMonth(
+              currentDate.getMonth() + months
+            );
+
+          }
+
+          // الوقت المتبقي بعد الشهور
+          const remaining = now - currentDate;
+
+          const totalSeconds =
+            Math.floor(remaining / 1000);
+
+          const days =
+            Math.floor(totalSeconds / 86400);
+
+          const hours =
+            Math.floor((totalSeconds % 86400) / 3600);
+
+          const minutes =
+            Math.floor((totalSeconds % 3600) / 60);
+
+          const seconds =
+            totalSeconds % 60;
+
+          // عرض النتائج
+          $("month").textContent = months;
+          $("days").textContent = days;
+          $("hours").textContent = hours;
+          $("minutes").textContent = minutes;
+          $("seconds").textContent = seconds;
+
+        }
+
+        updateTimer();
+
+        if (timerInterval !== null) {
+          clearInterval(timerInterval);
+        }
+
+        timerInterval = setInterval(updateTimer, 1000);
+
+      }
+
+      // كتابة الرسائل حرفًا حرفًا
+      function typeMessage(text) {
+
+        const messageElement = $("message-text");
+
+        if (typingTimer !== null) {
+          clearInterval(typingTimer);
+        }
+
+        const nextButton = $("next-message");
+
+        nextButton.disabled = true;
+        nextButton.style.opacity = ".6";
+
+        messageElement.textContent = "";
+
+        let index = 0;
+
+        typingTimer = setInterval(function () {
+
+          messageElement.textContent +=
+            text.charAt(index);
+
+          index++;
+
+          if (index >= text.length) {
+
+            clearInterval(typingTimer);
+
+            typingTimer = null;
+
+            nextButton.disabled = false;
+            nextButton.style.opacity = "1";
+
+          }
+
+        }, 45);
+
+      }
+
+      // الانتقال بين الرسائل
+      $("next-message").addEventListener("click", function () {
+
+        if (messageIndex < messages.length) {
+
+          typeMessage(messages[messageIndex]);
+
+          messageIndex++;
+
+        } else {
+
+          $("end-screen").style.display = "block";
+
+          $("end-screen").scrollIntoView({
+
+            behavior: "smooth",
+            block: "center"
+
+          });
+
+          $("next-message").textContent =
+            "إنهاء♥️";
+
+          $("next-message").disabled = true;
+
+          $("next-message").style.opacity = ".6";
+
+        }
+
+      });
+
+      // فتح الصور بحجم أكبر
+      const galleryImages =
+        document.querySelectorAll(".gallery img");
+
+      galleryImages.forEach(function (img) {
+
+        img.addEventListener("click", function () {
+
+          if (!img.src) return;
+
+          $("lightbox-img").src = img.src;
+
+          $("lightbox").style.display = "flex";
+
+        });
+
+      });
+
+      // إغلاق الصورة
+      function closeLightbox() {
+
+        $("lightbox").style.display = "none";
+
+        $("lightbox-img").src = "";
+
+      }
+
+      $("close-lightbox").addEventListener(
+        "click",
+        closeLightbox
+      );
+
+      $("lightbox").addEventListener("click", function (event) {
+
+        if (event.target === $("lightbox")) {
+          closeLightbox();
+        }
+
+      });
+
+      // إغلاق الصورة بزر Escape
+      document.addEventListener("keydown", function (event) {
+
+        if (event.key === "Escape") {
+          closeLightbox();
+        }
+
+      });
+
+      // إعادة الموقع بالكامل من البداية
+      $("restart-btn").addEventListener("click", function () {
+
+        window.location.reload();
+
+      });
+
+    });
+
+  </script>
+
+</body>
+</html>
